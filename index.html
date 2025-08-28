@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>파일 업로드 예제</title>
+</head>
+<body>
+  <h2>파일 업로드 테스트</h2>
+  <form id="uploadForm">
+    <input type="text" name="username" placeholder="작성자 이름"><br><br>
+    <input type="file" name="file" id="fileInput"><br><br>
+    <button type="submit">업로드</button>
+  </form>
+
+  <pre id="result"></pre>
+
+  <script>
+    const form = document.getElementById("uploadForm");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form); // multipart/form-data 자동 생성
+      try {
+        const res = await fetch("http://localhost:3000/upload", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        result.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        result.textContent = "에러 발생: " + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
